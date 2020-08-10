@@ -16,6 +16,9 @@ else()
 	project(iir VERSION 1.7.7 LANGUAGES CXX)
 endif()
 include(GNUInstallDirs)
+add_subdirectory(test)
+add_subdirectory(demo)
+enable_testing ()
 
 if (MSVC)
     add_compile_options(/W4)
@@ -87,3 +90,5 @@ install(TARGETS iir_static EXPORT iir-targets
   ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
   PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
   PRIVATE_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/iir)
+
+

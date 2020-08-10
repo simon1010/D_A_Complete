@@ -21,4 +21,4 @@ add_executable(Loader ${SRC})
 
 target_link_libraries(Loader Application Qt5::Core Qt5::Widgets)
 
-add_custom_command(TARGET Loader POST_BUILD COMMAND windeployqt ${Galileo_SOURCE_DIR}/bin)
+#add_custom_command(TARGET Loader POST_BUILD COMMAND windeployqt ${Galileo_SOURCE_DIR}/bin)
