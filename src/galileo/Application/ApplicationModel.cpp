@@ -2,8 +2,9 @@
 #include <galileo\Application\ConfigScene.h>
 #include <galileo\Application\AppScene.h>
 
-const std::string configSceneName = std::string("Config scene");
-const std::string appSceneName    = std::string("App scene");
+const std::string configSceneName   = std::string("Config scene");
+const std::string appSceneName      = std::string("App scene");
+const std::string plottingSceneName = std::string("Plotting scene");
 
 namespace galileo
 {
@@ -13,11 +14,13 @@ namespace galileo
 
 	void ApplicationModel::defineScene()
 	{
-		m_initialScene = std::make_shared<ConfigScene>(configSceneName);
-		m_secondScene  = std::make_shared<AppScene>(appSceneName);
+		m_initialScene  = std::make_shared<ConfigScene>(configSceneName);
+		m_secondScene   = std::make_shared<AppScene>(appSceneName);
+		m_plottingScene = std::make_shared<PlottingScene>(plottingSceneName);
 
 		m_Scenes.emplace(configSceneName, m_initialScene.get());
 		m_Scenes.emplace(appSceneName, m_secondScene.get());
+		m_Scenes.emplace(plottingSceneName, m_plottingScene.get());
 	}
 
 	void ApplicationModel::defineInitialScene()

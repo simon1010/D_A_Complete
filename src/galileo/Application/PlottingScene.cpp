@@ -38,6 +38,7 @@ namespace galileo
     mv_signalComboBox->addItem("Square");
     mv_signalComboBox->addItem("Sweep");
     mv_signalComboBox->addItem("Dirac");
+    mv_signalComboBox->addItem("SineSum_Filtered");
 
     // Initialize plotters
     mp_InitPlotters();
@@ -82,9 +83,22 @@ namespace galileo
     return amplitude * sin(2 * M_PI * frequency * t);
   }
 
+  double SqaureWave(double t, double amplitude, double frequency)
+  {
+    return std::signbit(amplitude * sin(2 * M_PI * frequency * t));
+  }
+
+  double Sweep(double start, double stop, double interval, int steps, double x)
+  {
+    double delta = x / (float)steps;
+    double t = interval * delta;
+    double phase = 2 * std::_Pi * t * (start + (stop - start) * delta / 2);
+    return 3 * sin(phase);
+  }
+
   void PlottingScene::mp_BackButton()
   {
-    const std::string c_szNextSceneName = "Initial scene";
+    const std::string c_szNextSceneName = "Config scene";
     emit SceneChange(c_szNextSceneName);
   }
 
@@ -118,15 +132,58 @@ namespace galileo
     }
     else if (comboSelection == "SineSum")
     {
+      // Set yAxis
+      for (int i = 0; i < NO_OF_SAMPLES; i++)
+      {
+        double xval = i / (double)NO_OF_SAMPLES;
+        y[i] = SineWave(xval, AMPLITUDE, 100) + SineWave(xval, AMPLITUDE / 2, 440) + SineWave(xval, AMPLITUDE / 3, 670) + SineWave(xval, AMPLITUDE / 3, 800) + SineWave(xval, AMPLITUDE / 3, 1200);
+      }
     }
     else if (comboSelection == "Square")
     {
+      // Set yAxis
+      for (int i = 0; i < NO_OF_SAMPLES; i++)
+      {
+        double xval = i / (double)NO_OF_SAMPLES;
+        y[i] = SqaureWave(xval, AMPLITUDE, 20);
+      }
     }
     else if (comboSelection == "Sweep")
     {
+      const int order = 4; // 4th order (=2 biquads)
+      Iir::Butterworth::LowPass<order> f;
+      const float samplingrate = SAMPLE_RATE; // Hz
+      const float cutoff_frequency = 600; // Hz
+      f.setup(samplingrate, cutoff_frequency);
+      // Set yAxis
+      for (int i = 0; i < NO_OF_SAMPLES; i++)
+      {
+        y[i] = f.filter(Sweep(500, 2000, 0.1, NO_OF_SAMPLES, i));
+      }
     }
     else if (comboSelection == "Dirac")
     {
+      // Set yAxis
+      for (int i = 0; i < NO_OF_SAMPLES; i++)
+      {
+        double xval = i / (double)NO_OF_SAMPLES;
+        y[i] = i == 1000 ? 1000. : 0.;
+      }
+    }
+    else if (comboSelection == "SineSum_Filtered")
+    {
+      const int order = 4; // 4th order (=2 biquads)
+      Iir::Butterworth::LowPass<order> f;
+      const float samplingrate = SAMPLE_RATE; // Hz
+      const float cutoff_frequency = 600; // Hz
+      f.setup(samplingrate, cutoff_frequency);
+
+      // Set yAxis
+      for (int i = 0; i < NO_OF_SAMPLES; i++)
+      {
+        double xval = i / (double)NO_OF_SAMPLES;
+        y[i] = f.filter(SineWave(xval, AMPLITUDE, 100) + SineWave(xval, AMPLITUDE / 2, 440) + SineWave(xval, AMPLITUDE / 3, 670) + SineWave(xval, AMPLITUDE / 3, 800) + SineWave(xval, AMPLITUDE / 3, 1200));
+      }
     }
 
     // FFT

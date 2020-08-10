@@ -18,6 +18,9 @@ namespace galileo
 		//connect btn's release signal to defined slot
 		QObject::connect(ui->okButton, SIGNAL(released()), this, SLOT( mf_OkButton()));
 
+		// go to plotting
+		QObject::connect(ui->plottingButton, SIGNAL(released()), this, SLOT(mf_PlottingButton()));
+
 		//set centralWidget
 		centralWidget = ui->centralwidget;
 
@@ -85,6 +88,13 @@ namespace galileo
 		m_TransientDataCollection.emplace("RefreshRate", newRefreshRate);
 
 		const std::string c_szNextSceneName = "App scene";
+		emit SceneChange(c_szNextSceneName);
+	}
+
+
+	void ConfigScene::mf_PlottingButton()
+	{
+	  const std::string c_szNextSceneName = "Plotting scene";
 		emit SceneChange(c_szNextSceneName);
 	}
 	

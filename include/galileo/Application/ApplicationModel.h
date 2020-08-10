@@ -3,6 +3,7 @@
 #include <galileo\Application\global.h>
 #include <galileo\Application\ConfigScene.h>
 #include <galileo\Application\AppScene.h>
+#include <galileo\Application\PlottingScene.h>
 
 namespace galileo
 {
@@ -19,7 +20,8 @@ namespace galileo
 		virtual void defineTransientData();
 
 	private:
-		std::shared_ptr<ConfigScene> m_initialScene;
-		std::shared_ptr<AppScene>    m_secondScene;
+		std::shared_ptr<ConfigScene>    m_initialScene;
+		std::shared_ptr<AppScene>       m_secondScene;
+		std::shared_ptr<PlottingScene>  m_plottingScene;
 	};
 }

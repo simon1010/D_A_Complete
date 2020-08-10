@@ -21,6 +21,7 @@ namespace galileo
 	public slots:
 
 		void mf_OkButton();
+		void mf_PlottingButton();
 
 	private:
 
