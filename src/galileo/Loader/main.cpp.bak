@@ -1,0 +1,20 @@
+#include <QApplication.h>
+#include <spring\Framework\Application.h>
+#include <spring\Application\ApplicationModel.h>
+
+int main(int argc, char **argv)
+{
+	QApplication qApplication(argc, argv);
+
+	galielo::Application& app = galielo::Application::getInstance();
+
+	galielo::ApplicationModel appModel;
+
+	app.setApplicationModel(&appModel);
+
+	app.start("Spring school project", 420, 420);
+
+	qApplication.exec();
+
+	return 0;
+}
